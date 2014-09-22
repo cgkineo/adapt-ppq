@@ -1,0 +1,15 @@
+{
+  "name": "adapt-ppq",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    ""
+  ],
+  "description": "",
+  "main": "/js/adapt-ppq.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-component"
+  ],
+  "license": "GPLv3"
+}
