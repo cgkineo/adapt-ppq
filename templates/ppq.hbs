@@ -1,4 +1,4 @@
-<div class="ppq-inner component-inner">
+<div class="ppq-inner component-inner" role="region" aria-label="{{_accessibility._ariaRegions.ppq}}">
     {{> component this}}
     <div class="ppq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
     	<div class="ppq-pinboard-container">
@@ -30,14 +30,14 @@
 
     		</div>
     	</div>
-        <div>
-            <div class="buttons">
-            </div>
-            <a href="#" class="button ppq-reset-pins">
-                <span>
-                    {{{_buttons.resetPins}}} 
-                </span>
-            </a>
+    </div>
+    <div>
+        <div class="buttons">
         </div>
+        <button class="button ppq-reset-pins">
+            <span>
+                {{{_buttons.resetPins}}} 
+            </span>
+        </button>
     </div>
 </div>

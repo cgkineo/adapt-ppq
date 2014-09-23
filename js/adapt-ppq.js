@@ -7,7 +7,7 @@ define(function(require) {
 
         events: {
             "click .ppq-pinboard":"placePin",
-            "click .ppq-widget .button.ppq-reset-pins":"resetPins"
+            "click .button.ppq-reset-pins":"resetPins"
         },
 
         preRender:function(){
@@ -27,6 +27,12 @@ define(function(require) {
                     this.showCompletedState();
                 }
             }, this));
+        },
+
+        updateButtons: function() {
+            QuestionView.prototype.updateButtons.apply(this);
+
+            this.model.get('_buttonState') == 'submit' ? this.$('.ppq-reset-pins').show() : this.$('.ppq-reset-pins').hide();
         },
 
         showCompletedState: function() {
