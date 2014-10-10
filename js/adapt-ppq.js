@@ -151,7 +151,7 @@ define(function(require) {
         handleDeviceResize: function() {
             this.$el.css("display:block");
             // Calls resetPins then if complete adds back classes that are required to show the completed state.
-            this.resetPins();
+            //this.resetPins();
             if (this.model.get("_isComplete")) {
                 this.$(".ppq-pin").addClass("in-use");
                 if (this.$(".ppq-widget").hasClass("show-user-answer")) {
