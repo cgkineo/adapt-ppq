@@ -7,13 +7,14 @@
     			{{#if _developerMode}}
 	    			{{#each _items}}
 	    				{{#if ../../desktopLayout}}
-				    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; bottom:{{desktop.bottom}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
+				    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
 				    	{{else}}
-				    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; bottom:{{mobile.bottom}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
+				    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
 				    	{{/if}}
 	      			{{/each}}
     			{{/if}}
 
+                <div id="ppq-boundary">
     			{{#if desktopLayout}}
     				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}"/>
     			{{else}}
@@ -27,6 +28,7 @@
 			    		<div class="ppq-icon ppq-incorrect-icon icon icon-cross"></div>
 			    	</div>
       			{{/each}}
+                </div>
 
     		</div>
     	</div>
@@ -34,10 +36,5 @@
     <div>
         <div class="buttons">
         </div>
-        <button class="button ppq-reset-pins">
-            <span>
-                {{{_buttons.resetPins}}} 
-            </span>
-        </button>
     </div>
 </div>
