@@ -4,18 +4,18 @@
     	<div class="ppq-pinboard-container">
     		<div class="ppq-pinboard-container-inner">
 
-    			{{#if _developerMode}}
-	    			{{#each _items}}
-	    				{{#if ../../desktopLayout}}
-				    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
-				    	{{else}}
-				    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
-				    	{{/if}}
-	      			{{/each}}
-    			{{/if}}
+	{{#if _developerMode}}
+		{{#each _items}}
+			{{#if ../../_isDesktopLayout}}
+	    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
+	    	{{else}}
+	    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
+	    	{{/if}}
+			{{/each}}
+	{{/if}}
 
                 <div id="ppq-boundary">
-    			{{#if desktopLayout}}
+    			{{#if _isDesktopLayout}}
     				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}"/>
     			{{else}}
     				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardMobile.src}}" title="{{_pinboardMobile.title}}" alt="{{_pinboardMobile.title}}"/>

@@ -6,367 +6,348 @@ define(function(require) {
 
     var PPQ = QuestionView.extend({
 
+        $pins: undefined,
+        $boundary: undefined,
+
         events: {
-            "click .ppq-pinboard":"placePin"
+            "click .ppq-pinboard":"onClickPlacePin"
         },
 
-        preRender:function(){
-            QuestionView.prototype.preRender.apply(this);
+
+        setupQuestion: function() {
+            console.log('PPQ: setupQuestion');
             this.setLayout();
             this.listenTo(Adapt, 'device:changed', this.handleDeviceChanged);
             this.listenTo(Adapt, 'device:resize', this.handleDeviceResize);
         },
-
-        postRender: function() {
-            QuestionView.prototype.postRender.apply(this);
-
-            var thisHandle = this;
-            //Wait for pinboard image to load then set ready. If already complete show completed state.
-            this.$('.ppq-pinboard-container-inner').imageready(_.bind(function() {
-
-                var $pins = this.$el.find('.ppq-pin');
-                $pins.each(function(index, item) {
-                    item.dragObj = new Draggabilly(item, {
-                        containment: true
-                    });
-                    if (thisHandle.model.get("_isSubmitted")) {
-                        item.dragObj.disable();
-                    }
-                });
-
-
-
-                this.setReadyStatus();
-                if (this.model.get("_isComplete")) {
-                    this.showCompletedState();
-                }
-            }, this));
-        },
-
-        updateButtons: function() {
-            QuestionView.prototype.updateButtons.apply(this);
-
-            if (this.model.get("_isSubmitted")) {
-                 var $pins = this.$el.find('.ppq-pin');
-                $pins.each(function(index, item) {
-                    item.dragObj.disable();
-                });
-                this.model.set("_countCorrect",this.$(".item-correct").length);
-            }
-
-            //this.model.get('_buttonState') == 'submit' ? this.$('.ppq-reset-pins').show() : this.$('.ppq-reset-pins').hide();
-        },
-
-        showCompletedState: function() {
-
-            //show the user answer then apply classes to set the view to a completed state
-            this.hideCorrectAnswer();
-            this.$(".ppq-pin").addClass("in-use");
-            this.$(".ppq-widget").addClass("submitted disabled show-user-answer");
-            if (this.model.get("_isCorrect")) {
-                this.$(".ppq-widget").addClass("correct");
-            }
-        },
-
-        handleDeviceChanged: function() {
-
-            this.$el.css("display:block");
-            
-            //Currently causes layout to change from desktop to mobile even if completed.
-            this.setLayout();
-
-            var props, isDesktop = this.model.get('desktopLayout');
-
-            _.each(this.model.get('_items'), function(item, index) {
-                props = isDesktop ? item.desktop : item.mobile;
-                this.$('.ppq-correct-zone').eq(index).css({left:props.left+'%', top:props.top+'%', width:props.width+'%', height:props.height+'%'});
-            }, this);
-
-            props = isDesktop ? this.model.get('_pinboardDesktop') : this.model.get('_pinboardMobile');
-
-            this.$('.ppq-pinboard').attr({src:props.src, title:props.title, alt:props.alt});
-
-            this.handleDeviceResize();
-
-            if (this.model.get("_isComplete")) {
-                var width = parseInt(this.$('.ppq-pinboard').width(),10),
-                height = parseInt(this.$('.ppq-pinboard').height(),10);
-
-                var $pins = this.$(".ppq-pin");
-                var countCorrect = this.model.get("_countCorrect");
-                var currentLayoutItems = this.getItemsForCurrentLayout(this.model.get("_items"));
-
-                var moved = 0;
-                var uas = this.model.get("_userAnswer");
-                _.each(currentLayoutItems, _.bind(function(item) {
-                    var $pin = $($pins[moved]);
-                    var top = 0;
-                    var left = 0;
-                    var uaObj;
-                    if (moved < countCorrect) {
-                        top = ((height/ 100) * (item.top + (item.height/2))) - ($pin.height() / 1.05);
-                        left = ((width / 100) * (item.left + (item.width / 2))) - ($pin.width() / 1.05);
-                        $pin.css({
-                            top: top + 'px',
-                            left: left + 'px'
-                        });
-
-                    } else {
-                        
-                        var inpos = true;
-                        while(inpos == true) {
-                            inpos = false;
-                            top = (Math.random() * 80) + 10;
-                            left = (Math.random() * 80) + 10;
-                            top = ((height/ 100) * top) - ($pin.height() / 1.05);
-                            left = ((width/ 100) * left) - ($pin.width() / 1.05);
-
-                            var atop = top - ($pin.height());
-                            var aleft = left - ($pin.width() /2);
-
-                            $pin.css({
-                                top: top + 'px',
-                                left: left + 'px'
-                            });
-
-                            inpos = this.isInCorrectZone($pin, undefined, currentLayoutItems);
-                        }
-
-                    }
-
-                    uaObj = {
-                            top: (100/height) * top,
-                            left: (100/width) * left
-                        };
-                    uas[moved] = uaObj;
-
-                    moved++;
-                }, this))
-                this.model.set("_userAnswer", uas);
-            }
-
-            this.handleDeviceResize();
-        },
-
-        handleDeviceResize: function() {
-            this.$el.css("display:block");
-            // Calls resetPins then if complete adds back classes that are required to show the completed state.
-            //this.resetPins();
-            if (this.model.get("_isComplete")) {
-                this.$(".ppq-pin").addClass("in-use");
-                if (this.$(".ppq-widget").hasClass("show-user-answer")) {
-                    this.hideCorrectAnswer();
-                } else {
-                    this.showCorrectAnswer();
-                }
-            }
-        },
-
         setLayout: function() {
-
+            console.log('PPQ: setLayout');
             //Setlayout for view. This is also called when device changes.
             if (Adapt.device.screenSize == "medium" || Adapt.device.screenSize == "large") {
                 this.model.set({
-                    desktopLayout:true
+                    _isDesktopLayout:true
                 });
             } else if (Adapt.device.screenSize == "small") {
                 this.model.set({
-                    desktopLayout:false
+                    _isDesktopLayout:false
                 });
             }
             
         },
-
-        placePin: function(event) {
-
-
-            //Handles click event on the pinboard image to place pins
-            var $pin = this.$('.ppq-pin:not(.in-use):first');
-            var offset = this.$('.ppq-pinboard').offset();
-
-            var clickY = ( event.clientY < offset.top ? event.pageY : event.clientY );
-            var clickX = ( event.clientX < offset.left ? event.pageX : event.clientX );
-
-            var relX = (clickX - offset.left) - ($pin.width() / 2);
-            var relY = ((clickY - offset.top)) - $pin.height();
-
-            $pin.css({
-                top:relY + 'px',
-                left:relX + 'px'
-            }).addClass('in-use');
-            $pin.addClass('in-use');
-        },
-
         resetQuestion: function() {
-            this.resetPins();
+            console.log('PPQ: resetQuestion');
             this.model.set({
                 _isAtLeastOneCorrectSelection: false
             });
 
-            var $pins = this.$el.find('.ppq-pin');
-            $pins.each(function(index, item) {
-                if (item.dragObj) item.dragObj.enable();
+        },
+        onQuestionRendered: function() {
+            console.log('PPQ: onQuestionRendered');
+            this.$el.imageready(_.bind(function() {
+                this.setReadyStatus();
+            }, this));
+            this.$pins = this.$el.find('.ppq-pin');
+            this.$boundary = this.$el.find('#ppq-boundary');
+            this.$pins.each(_.bind(this.attachDragHandles, this));
+            //do pin restore mode
+        },
+
+
+        attachDragHandles: function(index, item) {
+            if (item._dragger !== undefined) return;
+            item._dragger = new Draggabilly(item, {
+                container: this.$boundary[0]
+            });
+            item._dragger.on("dragStart", _.bind(this.dragStart, this));
+            item._dragger.on("dragEnd", _.bind(this.dragEnd, this));
+        },
+        dragStart: function(dragHandleInstance, event, pointer) {
+            var $pin = $(dragHandleInstance.element);
+            //dragging is done in pixel positioning
+            this.changePinToPixelPositioningMode($pin, {
+                top: pointer.pageY,
+                left: pointer.pageX
+            });
+        },
+        dragEnd: function(dragHandleInstance, event, pointer) {
+            var $pin = $(dragHandleInstance.element);
+            //restore percentage positioning
+            this.calcPinPositionFromPagePosition($pin, {
+                top: pointer.pageY,
+                left: pointer.pageX
             });
         },
 
-        resetPins: function(event) {
 
-            //the class "in-use" is what makes the pins visible
-            if (event) event.preventDefault();
-            this.$(".ppq-pin").removeClass("in-use correct incorrect");
+
+        handleDeviceChanged: function() {
+            console.log('PPQ: handleDeviceChanged');
+            this.setLayout();
+            this.render();
         },
+        handleDeviceResize: function() {
+            console.log('PPQ: handleDeviceResize');
+        },
+
+        
 
         canSubmit: function() {
-            if(this.$(".ppq-pin.in-use").length == this.model.get("_items").length) {
-                return true;
-            } else {
-                return false;
-            }
+            console.log('PPQ: canSubmit');
+            var $pin = this.$pins.filter(":not(.in-use):first");
+            if ($pin.length === 0) return true;    
+            return false;
         },
-
-        storeUserAnswer:function()
-        {
-            var pins = this.$(".ppq-pin");
-
-            // User answers aren't stored in the items array. Instead we create a new array with userAnswer objects.
-            var userAnswers = [];
-
-            _.each(pins, function(pin) {
-               // userAnswer stores the return value from getUserAnswer and adds that to the userAnswers array.
-               var userAnswer = this.getUserAnswer($(pin));
-               userAnswers.push(userAnswer);
-            }, this);
-
-            this.model.set('_userAnswer', userAnswers);
+        storeUserAnswer: function() {
+            console.log('PPQ: storeUserAnswer');
+            var store = [];
+            var dl = this.model.get("_isDesktopLayout");
+            this.$pins.each(function (index, item) {
+                var $pin = $(item);
+                var px = {
+                    top: parseInt($pin.attr("toppx")),
+                    left: parseInt($pin.attr("leftpx"))  
+                };
+                var per = {
+                    top: parseInt($pin.attr("topper")),
+                    left: parseInt($pin.attr("leftper"))
+                };
+                store.push({
+                    px: px,
+                    per: per,
+                    dl: dl
+                });
+            });
+            this.model.set("_userAnswer", store);
         },
-
         isCorrect: function() {
+            console.log('PPQ: isCorrect');
+            
+            var correctZones = this.model.get("_items");
+            var isDesktopLayout = this.model.get("_isDesktopLayout");
+
             var correctCount = 0;
-            var pins = this.$(".ppq-pin");
 
-            // There are both desktop and mobile items but nested in the same items object.
-            // So we need to store the currentLayoutItems locally to check answers against the current layout.
-            var currentLayoutItems = this.getItemsForCurrentLayout(this.model.get("_items"));
+            this.$pins.each(function (index, item) {
+                var $pin = $(item);
+                var point = {
+                    top: parseInt($pin.attr("pointtop")),
+                    left: parseInt($pin.attr("pointleft"))
+                };
+                var isCorrect = false;
+                _.each(correctZones, function(zone, index) {
+                    var mediaZone;
+                    switch (isDesktopLayout) {
+                    case true:
+                        mediaZone=zone.desktop;
+                        break;
+                    case false:
+                        mediaZone=zone.mobile;
+                        break;
+                    }
 
-            // Loop through the currentLayoutItems and check each answer
-            _.each(currentLayoutItems, function(item, index) {
-                var $pin = $(pins[index]);
-                var isCorrect = this.isInCorrectZone($pin, null, currentLayoutItems);
-                if (isCorrect) {
-                    item._isCorrect = true;
-                    correctCount++;
-                    this.model.set('_isAtLeastOneCorrectSelection', true);
-               } else {
-                    item._isCorrect = false;
-               }
-            }, this);
+                    if (point.left >= mediaZone.left &&
+                        point.top >= mediaZone.top &&
+                        point.left <= mediaZone.left+mediaZone.width &&
+                        point.top <= mediaZone.top+mediaZone.height) {
+                        zone._isCorrect = isCorrect = true;
+                        $pin.attr("zone", index);
+                        correctCount++;
+                    }
+                });
+                if (!isCorrect) {
+                    $pin.attr("zone", "-1");
+                }
+            });
 
-            return correctCount == currentLayoutItems.length;
+            if (correctCount > 1) this.model.set('_isAtLeastOneCorrectSelection', true);
+            var correct = (correctCount === this.$pins.length);
+
+
+            return correct;
+
         },
-
         isPartlyCorrect: function() {
+            console.log('PPQ: isPartlyCorrect');
             return this.model.get('_isAtLeastOneCorrectSelection');
         },
-
-        getItemsForCurrentLayout: function(items) {
-
-            // Returns an array of items based on current layout
-            var currentLayoutItems = [];
-            _.each(items, function(item) {
-                var newItem;
-                if (this.model.get("desktopLayout")) {
-                    newItem = item.desktop;
-                } else {
-                    newItem = item.mobile;
+        showMarking: function() {
+            console.log('PPQ: showMarking');
+            var zones = this.model.get("_items");
+            this.$pins.removeClass("item-correct").addClass("item-incorrect");
+            _.each(zones, _.bind(function(zone, index) {
+                if (zone._isCorrect) {
+                    var $pin = this.$pins.filter("[zone='" + index + "']");
+                    $pin.addClass("item-correct").removeClass("item-incorrect");
                 }
-                currentLayoutItems.push(newItem);
-            }, this);
-            return currentLayoutItems;
+            }, this));
         },
-
-        isInCorrectZone: function($pin, item, items){
-            var width = parseInt(this.$('.ppq-pinboard').width(),10),
-                height = parseInt(this.$('.ppq-pinboard').height(),10),
-                pinLeft = parseFloat($pin.css("left")) + (parseFloat($pin.css("width")) / 2),
-                pinTop = parseFloat($pin.css("top")) + parseFloat($pin.css("height")),
-                inCorrectZone = false;
-            var pinId = $pin.attr("data-id");
-
-            if(item) {
-                var top = (item.top/100)*height,
-                    left = (item.left/100)*width,
-                    bottom = top + (item.height/100)*height,
-                    right = left + (item.width/100)*width;
-                return pinLeft > left && pinLeft < right && pinTop < bottom && pinTop > top;
-            } else {
-                for (var i = 0; i < items.length; i++) {
-                    var item = items[i],
-                        top = (item.top/100)*height,
-                        left = (item.left/100)*width,
-                        bottom = top + (item.height/100)*height,
-                        right = left + (item.width/100)*width;
-                    inCorrectZone = pinLeft > left && pinLeft < right && pinTop < bottom && pinTop > top;
-                    if(inCorrectZone) break;
-                }
-                return inCorrectZone;
-            }
-        },
-
-        getUserAnswer: function($pin) {
-
-            // Returns a user answer object that gets added to a userAnswers array
-            var left = parseFloat($pin.css("left")),
-                top = parseFloat($pin.css("top")),
-                width = parseInt(this.$('.ppq-pinboard').width(),10),
-                height = parseInt(this.$('.ppq-pinboard').height(),10);
-            return {
-                left: (100/width) * left,
-                top: (100/height) * top
-            }
-        },
-
-        showMarking:function()
-        {
-            this.hideCorrectAnswer();
-        },
-
         hideCorrectAnswer: function() {
-            var width = parseInt(this.$('.ppq-pinboard').width(),10),
-                height = parseInt(this.$('.ppq-pinboard').height(),10);
-            var pins = this.$(".ppq-pin");
-            var userAnswers = this.model.get("_userAnswer");
-            var currentLayoutItems = this.getItemsForCurrentLayout(this.model.get("_items"));
-
-            _.each(userAnswers, function(userAnswer, index) {
-                var $pin = $(pins[index])
-                $pin.css({
-                    top:(height/100) * userAnswer.top + "px",
-                    left:(width/100) *userAnswer.left + "px"
+            console.log('PPQ: hideCorrectAnswer');
+            var _userAnswer = this.model.get("_userAnswer");
+            _.each(_userAnswer, _.bind(function(item, index) {
+                $(this.$pins[index]).css({
+                    top: item.per.top + "%",
+                    left: item.per.left + "%"
                 });
+            }, this));
+        },
+        showCorrectAnswer: function() {
+            console.log('PPQ: showCorrectAnswer');
+            var correctZones = this.model.get("_items");
+            var isDesktopLayout = this.model.get("_isDesktopLayout");
 
-                // Reset classes then apply correct incorrect
-                $pin.removeClass("item-correct item-incorrect");
-                if (this.isInCorrectZone($pin, null, currentLayoutItems)) {
-                    $pin.addClass("item-correct");
-                } else {
-                    $pin.addClass("item-incorrect");
+            var correctCount = 0;
+
+            this.$pins.each(function (index, item) {
+                var $pin = $(item);
+                var zone = correctZones[index];
+                var mediaZone;
+                switch (isDesktopLayout) {
+                case true:
+                    mediaZone=zone.desktop;
+                    break;
+                case false:
+                    mediaZone=zone.mobile;
+                    break;
                 }
-            }, this);
+
+                var boundaryDimensions = {
+                    height: this.$boundary.height(),
+                    width: this.$boundary.width()
+                };
+
+                var pinCenterOffset = {
+                    left: $pin.width() / 2,
+                    top: $pin.height()
+                };
+
+            });
         },
 
-        showCorrectAnswer: function() {
-            var width = parseInt(this.$('.ppq-pinboard').width(),10),
-                height = parseInt(this.$('.ppq-pinboard').height(),10);
-            var pins = this.$(".ppq-pin"),
-                answers = this.getItemsForCurrentLayout(this.model.get("_items"));
-            _.each(answers, function(item, index) {
-                var $pin = $(pins[index]);
-                $pin.css({
-                    top: ((height/ 100) * (item.top + (item.height/2))) - ($pin.height() / 2 ) + 'px',
-                    left: ((width / 100) * (item.left + (item.width / 2))) - ($pin.width() / 2) + 'px'
-                });
-                $pin.removeClass("item-incorrect").addClass("item-correct");
+
+
+
+
+        onClickPlacePin: function(event) {
+        	console.log('PPQ: onClickPlacePin');
+            
+            var $pin = this.$pins.filter(":not(.in-use):first");
+            if ($pin.length === 0) return;
+
+            var pagePoint = {
+                left: event.pageX,
+                top: event.pageY
+            };
+            //place as percentage positioning
+            var pointAsPercent = this.calcPinPositionFromPagePosition($pin, pagePoint);
+
+            $pin.addClass("in-use");
+        },
+        calcPinPositionFromPagePosition: function($pin, pagePoint) {
+            /*
+            *   point allocations are by mouse to page position,
+            *   images are placed relative to boundary, 
+            *   coversion happens here
+            */
+            var boundaryOffset = this.$boundary.offset();
+
+            var boundaryDimensions = {
+                height: this.$boundary.height(),
+                width: this.$boundary.width()
+            };
+
+            var pinCenterOffset = {
+                left: $pin.width() / 2,
+                top: $pin.height()
+            };
+
+            //startPoint is used for dragstart/dragend mouse to image offsets
+            var startPoint = {
+                left: parseInt($pin.attr("leftstart")),
+                top:  parseInt($pin.attr("topstart"))
+            };
+            if (!isNaN(startPoint.left) && !isNaN(startPoint.top)) {
+                var pickupPoint = {
+                    left: parseInt($pin.attr("leftpx")),
+                    top: parseInt($pin.attr("toppx"))
+                };
+                pinCenterOffset.left -= pickupPoint.left - startPoint.left;
+                pinCenterOffset.top -= pickupPoint.top - startPoint.top;
+            }
+
+            var pointAsPixel = {
+                left: Math.round((pagePoint.left - boundaryOffset.left)),
+                top:  Math.round((pagePoint.top - boundaryOffset.top))
+            };
+
+            var pointAsPercent = {
+                left: Math.round((100 / boundaryDimensions.width) * pointAsPixel.left),
+                top:  Math.round((100 / boundaryDimensions.height) * pointAsPixel.top)
+            };
+
+            var positionAsPixel = {
+                left: Math.round((pagePoint.left - boundaryOffset.left - pinCenterOffset.left)),
+                top:  Math.round((pagePoint.top - boundaryOffset.top - pinCenterOffset.top))
+            };
+
+            var positionAsPercent = {
+                left: Math.round((100 / boundaryDimensions.width) * positionAsPixel.left),
+                top:  Math.round((100 / boundaryDimensions.height) * positionAsPixel.top)
+            };
+
+            $pin.css({
+                left: positionAsPercent.left + "%",
+                top: positionAsPercent.top + "%"
+            }).attr({
+                //save percentage and pixel positions on element
+                mode: "percent",
+                leftpx: positionAsPixel.left,
+                toppx: positionAsPixel.top,
+                leftper: positionAsPercent.left,
+                topper: positionAsPercent.top,
+                pointleft: pointAsPercent.left,
+                pointtop: pointAsPercent.top
             });
+
+            return positionAsPercent;
+        },
+        changePinToPixelPositioningMode: function($pin, fromPoint) {
+            var mode = $pin.attr("mode");
+            var attr, css;
+            var px;
+            switch (mode) {
+            case "percent":
+                //convert element positioning to pixel format using the saved positions
+                var px = {
+                    top: parseInt($pin.attr("toppx")),
+                    left: parseInt($pin.attr("leftpx"))  
+                };
+                var css = {
+                    left: px.left + "px",
+                    top: px.top + "px"
+                };
+
+                var boundaryOffset = this.$boundary.offset();
+
+                var pinCenterOffset = {
+                    left: $pin.width() / 2,
+                    top: $pin.height()
+                };
+
+                //save start click point to element
+                var startPointAsPixel = {
+                    left: Math.round((fromPoint.left - boundaryOffset.left - pinCenterOffset.left)),
+                    top:  Math.round((fromPoint.top - boundaryOffset.top - pinCenterOffset.top))
+                };
+                var attr = {
+                    mode: "pixel",
+                    topstart: startPointAsPixel.top,
+                    leftstart: startPointAsPixel.left
+                };
+
+                $pin.css(css).attr(attr);
+                break;
+            }
         }
 
     });
