@@ -15,13 +15,13 @@ define(function(require) {
 
 
         setupQuestion: function() {
-            console.log('PPQ: setupQuestion');
+            //console.log('PPQ: setupQuestion');
             this.setLayout();
             this.listenTo(Adapt, 'device:changed', this.handleDeviceChanged);
             this.listenTo(Adapt, 'device:resize', this.handleDeviceResize);
         },
         setLayout: function() {
-            console.log('PPQ: setLayout');
+            //console.log('PPQ: setLayout');
             //Setlayout for view. This is also called when device changes.
             if (Adapt.device.screenSize == "medium" || Adapt.device.screenSize == "large") {
                 this.model.set({
@@ -35,21 +35,21 @@ define(function(require) {
             
         },
         resetQuestion: function() {
-            console.log('PPQ: resetQuestion');
+            //console.log('PPQ: resetQuestion');
             this.model.set({
                 _isAtLeastOneCorrectSelection: false
             });
 
         },
         onQuestionRendered: function() {
-            console.log('PPQ: onQuestionRendered');
+            //console.log('PPQ: onQuestionRendered');
             this.$el.imageready(_.bind(function() {
                 this.setReadyStatus();
             }, this));
             this.$pins = this.$el.find('.ppq-pin');
             this.$boundary = this.$el.find('#ppq-boundary');
+            if (this.model.get("_isSubmitted")) return;
             this.$pins.each(_.bind(this.attachDragHandles, this));
-            //do pin restore mode
         },
 
 
@@ -60,6 +60,11 @@ define(function(require) {
             });
             item._dragger.on("dragStart", _.bind(this.dragStart, this));
             item._dragger.on("dragEnd", _.bind(this.dragEnd, this));
+        },
+        detachDragHandles: function(index, item) {
+            if (item._dragger === undefined) return;
+            item._dragger.disable();
+            delete item._dragger;
         },
         dragStart: function(dragHandleInstance, event, pointer) {
             var $pin = $(dragHandleInstance.element);
@@ -81,24 +86,38 @@ define(function(require) {
 
 
         handleDeviceChanged: function() {
-            console.log('PPQ: handleDeviceChanged');
+            //console.log('PPQ: handleDeviceChanged');
             this.setLayout();
             this.render();
+            this.$el.imageready(_.bind(function() {
+                this.$boundary = this.$el.find("#ppq-boundary");
+                this.$pins = this.$el.find('.ppq-pin');
+                if (this.model.get("_isSubmitted")) {
+                    //TODO: FINISH THIS
+                    this.$pins.addClass("in-use");
+                    var newAnswers = this.changeLayoutUserAnswer();
+                    this.restoreAnswer(newAnswers);
+
+                } else {
+                    //TODO: RESET QUESTION
+                }
+            }, this));
+            
         },
         handleDeviceResize: function() {
-            console.log('PPQ: handleDeviceResize');
+            //console.log('PPQ: handleDeviceResize');
         },
 
         
 
         canSubmit: function() {
-            console.log('PPQ: canSubmit');
+            //console.log('PPQ: canSubmit');
             var $pin = this.$pins.filter(":not(.in-use):first");
             if ($pin.length === 0) return true;    
             return false;
         },
         storeUserAnswer: function() {
-            console.log('PPQ: storeUserAnswer');
+            //console.log('PPQ: storeUserAnswer');
             var store = [];
             var dl = this.model.get("_isDesktopLayout");
             this.$pins.each(function (index, item) {
@@ -120,7 +139,9 @@ define(function(require) {
             this.model.set("_userAnswer", store);
         },
         isCorrect: function() {
-            console.log('PPQ: isCorrect');
+            //console.log('PPQ: isCorrect');
+
+            this.$pins.each(_.bind(this.detachDragHandles, this));
             
             var correctZones = this.model.get("_items");
             var isDesktopLayout = this.model.get("_isDesktopLayout");
@@ -167,11 +188,11 @@ define(function(require) {
 
         },
         isPartlyCorrect: function() {
-            console.log('PPQ: isPartlyCorrect');
+            //console.log('PPQ: isPartlyCorrect');
             return this.model.get('_isAtLeastOneCorrectSelection');
         },
         showMarking: function() {
-            console.log('PPQ: showMarking');
+            //console.log('PPQ: showMarking');
             var zones = this.model.get("_items");
             this.$pins.removeClass("item-correct").addClass("item-incorrect");
             _.each(zones, _.bind(function(zone, index) {
@@ -182,23 +203,21 @@ define(function(require) {
             }, this));
         },
         hideCorrectAnswer: function() {
-            console.log('PPQ: hideCorrectAnswer');
-            var _userAnswer = this.model.get("_userAnswer");
-            _.each(_userAnswer, _.bind(function(item, index) {
-                $(this.$pins[index]).css({
-                    top: item.per.top + "%",
-                    left: item.per.left + "%"
-                });
-            }, this));
+            //console.log('PPQ: hideCorrectAnswer');
+            this.model.set("_isCorrectAnswer", false);
+
+            this.restoreUserAnswer();
         },
         showCorrectAnswer: function() {
-            console.log('PPQ: showCorrectAnswer');
+            //console.log('PPQ: showCorrectAnswer');
             var correctZones = this.model.get("_items");
             var isDesktopLayout = this.model.get("_isDesktopLayout");
 
+            this.model.set("_isCorrectAnswer", true);
+
             var correctCount = 0;
 
-            this.$pins.each(function (index, item) {
+            this.$pins.each(_.bind(function (index, item) {
                 var $pin = $(item);
                 var zone = correctZones[index];
                 var mediaZone;
@@ -216,20 +235,138 @@ define(function(require) {
                     width: this.$boundary.width()
                 };
 
-                var pinCenterOffset = {
-                    left: $pin.width() / 2,
-                    top: $pin.height()
+                var pinCenterOffsetPercent = {
+                    left: (100/boundaryDimensions.width) * ($pin.width() / 2),
+                    top: (100/boundaryDimensions.height) * ($pin.height())
                 };
 
-            });
+                var positionAsPercent = {
+                    left: mediaZone.left + (mediaZone.width / 2) - pinCenterOffsetPercent.left,
+                    top: mediaZone.top + (mediaZone.height / 2) - pinCenterOffsetPercent.top,
+                };
+
+                $pin.css({
+                    left: positionAsPercent.left + "%",
+                    top: positionAsPercent.top + "%",
+                }).removeClass("item-incorrect").removeClass("item-correct").addClass( "item-correct" );
+
+            }, this));
         },
 
 
 
+        changeLayoutUserAnswer: function() {
+            var _userAnswer = this.model.get("_userAnswer");
+            var correctZones = this.model.get("_items");
+            var isDesktopLayout = this.model.get("_isDesktopLayout");
+            var isCorrectAnswer = this.model.get("_isCorrectAnswer");
 
+            var newAnswers = [];
+            _.each(_userAnswer, _.bind(function(item, index){
+                var zone = correctZones[index];
+                var mediaZone;
+                switch (isDesktopLayout) {
+                case true:
+                    mediaZone=zone.desktop;
+                    break;
+                case false:
+                    mediaZone=zone.mobile;
+                    break;
+                }
 
+                var boundaryDimensions = {
+                    height: this.$boundary.height(),
+                    width: this.$boundary.width()
+                };
+
+                var pinCenterOffsetPercent = {
+                    marginLeft:  (100/boundaryDimensions.width) * ($(this.$pins[0]).width()),
+                    left: (100/boundaryDimensions.width) * ($(this.$pins[0]).width() / 2),
+                    top: (100/boundaryDimensions.height) * ($(this.$pins[0]).height())
+                };
+
+                var positionAsPercent;
+
+                //if (index < correct) {
+                if (correctZones[index]._isCorrect || isCorrectAnswer) {
+                    //place correct pin inside area
+                    positionAsPercent = {
+                        left: mediaZone.left + (mediaZone.width / 2) - pinCenterOffsetPercent.left,
+                        top: mediaZone.top + (mediaZone.height / 2) - pinCenterOffsetPercent.top,
+                    };
+
+                } else {
+
+                    //place incorrect pin outside all areas
+                    var limiter = 0;
+                    while(limiter < 100) {
+
+                        positionAsPercent = {
+                            left: ((100 - (pinCenterOffsetPercent.marginLeft * 2)) * Math.random()) - pinCenterOffsetPercent.left + pinCenterOffsetPercent.marginLeft,
+                            top: ((100 - (pinCenterOffsetPercent.top * 2)) * Math.random()),
+                        };
+
+                        var found = false;
+                        for(var cz = 0; cz < correctZones.length; cz++) {
+                            var cZone;
+                            switch (isDesktopLayout) {
+                            case true:
+                                cZone=correctZones[cz].desktop;
+                                break;
+                            case false:
+                                cZone=correctZones[cz].mobile;
+                                break;
+                            }
+                            if (positionAsPercent.left >= cZone.left - pinCenterOffsetPercent.marginLeft && positionAsPercent.left <= cZone.left + cZone.width + pinCenterOffsetPercent.marginLeft && positionAsPercent.top >= cZone.top - pinCenterOffsetPercent.top && positionAsPercent.top <= cZone.top + cZone.height + pinCenterOffsetPercent.top) {
+                                found = true;
+                                break;
+                            }
+                        }
+                        if (!found) break;
+                        limiter++;
+                    }
+                    if (limiter === 100) console.log("PPQ: Incorrect area search - limiter reached");
+
+                    
+
+                }
+
+                newAnswers.push(positionAsPercent)
+                if (!isCorrectAnswer) item.per = positionAsPercent;
+
+            }, this));
+
+            return newAnswers;
+
+        },
+        restoreUserAnswer: function() {
+            var _userAnswer = this.model.get("_userAnswer");
+            var _items = this.model.get("_items");
+            var isCorrectAnswer = this.model.get("_isCorrectAnswer");
+
+            _.each(_userAnswer, _.bind(function(item, index) {
+                //console.log(item);
+                $(this.$pins[index]).css({
+                    top: item.per.top + "%",
+                    left: item.per.left + "%"
+                }).removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect ? "item-correct" : "item-incorrect" ) );
+            }, this));
+        },
+        restoreAnswer: function(newAnswers) {
+            var _userAnswer = this.model.get("_userAnswer");
+            var _items = this.model.get("_items");
+            var isCorrectAnswer = this.model.get("_isCorrectAnswer");
+
+            _.each(newAnswers, _.bind(function(item, index) {
+                //console.log(item);
+                $(this.$pins[index]).css({
+                    top: item.top + "%",
+                    left: item.left + "%"
+                }).removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect || isCorrectAnswer ? "item-correct" : "item-incorrect" ) );
+            }, this));
+        },
         onClickPlacePin: function(event) {
-        	console.log('PPQ: onClickPlacePin');
+        	//console.log('PPQ: onClickPlacePin');
             
             var $pin = this.$pins.filter(":not(.in-use):first");
             if ($pin.length === 0) return;
