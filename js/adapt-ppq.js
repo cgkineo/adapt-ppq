@@ -10,7 +10,8 @@ define(function(require) {
         $boundary: undefined,
 
         events: {
-            "click .ppq-pinboard":"onClickPlacePin"
+            "click .ppq-pinboard":"onClickPlacePin",
+            "touchstart .ppg-pinboard":"onTouchPlacePin"
         },
 
 
@@ -365,9 +366,19 @@ define(function(require) {
                 }).removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect || isCorrectAnswer ? "item-correct" : "item-incorrect" ) );
             }, this));
         },
+        onTouchPlacePin: function(event) {
+            event.pageX = event.clientX;
+            event.pageY = event.clientY;
+            this.onClickPlacePin(event);
+        },
         onClickPlacePin: function(event) {
         	//console.log('PPQ: onClickPlacePin');
-            
+            var boundaryOffset = this.$boundary.offset();
+            if (event.clientY >= boundaryOffset.top) {
+                event.pageX = event.clientX;
+                event.pageY = event.clientY;
+            }
+
             var $pin = this.$pins.filter(":not(.in-use):first");
             if ($pin.length === 0) return;
 
