@@ -124,12 +124,12 @@ define(function(require) {
             this.$pins.each(function (index, item) {
                 var $pin = $(item);
                 var px = {
-                    top: parseInt($pin.attr("toppx")),
-                    left: parseInt($pin.attr("leftpx"))  
+                    top: parseFloat($pin.attr("toppx")),
+                    left: parseFloat($pin.attr("leftpx"))  
                 };
                 var per = {
-                    top: parseInt($pin.attr("topper")),
-                    left: parseInt($pin.attr("leftper"))
+                    top: parseFloat($pin.attr("topper")),
+                    left: parseFloat($pin.attr("leftper"))
                 };
                 store.push({
                     px: px,
@@ -152,8 +152,8 @@ define(function(require) {
             this.$pins.each(function (index, item) {
                 var $pin = $(item);
                 var point = {
-                    top: parseInt($pin.attr("pointtop")),
-                    left: parseInt($pin.attr("pointleft"))
+                    top: parseFloat($pin.attr("pointtop")),
+                    left: parseFloat($pin.attr("pointleft"))
                 };
                 var isCorrect = false;
                 _.each(correctZones, function(zone, index) {
@@ -410,24 +410,24 @@ define(function(require) {
             };
 
             var pointAsPixel = {
-                left: Math.round((pagePoint.left - boundaryOffset.left)),
-                top:  Math.round((pagePoint.top - boundaryOffset.top))
+                left: ((pagePoint.left - boundaryOffset.left)),
+                top:  ((pagePoint.top - boundaryOffset.top))
             };
 
             var pointAsPercent = {
-                left: Math.round((100 / boundaryDimensions.width) * pointAsPixel.left),
-                top:  Math.round((100 / boundaryDimensions.height) * pointAsPixel.top)
+                left: ((100 / boundaryDimensions.width) * pointAsPixel.left),
+                top:  ((100 / boundaryDimensions.height) * pointAsPixel.top)
             };
 
             //startPoint is used for dragstart/dragend mouse to image offsets
             var startPoint = {
-                left: parseInt($pin.attr("leftstart")),
-                top:  parseInt($pin.attr("topstart"))
+                left: parseFloat($pin.attr("leftstart")),
+                top:  parseFloat($pin.attr("topstart"))
             };
             if (!isNaN(startPoint.left) && !isNaN(startPoint.top)) {
                 var pickupPoint = {
-                    left: parseInt($pin.attr("leftpx")),
-                    top: parseInt($pin.attr("toppx"))
+                    left: parseFloat($pin.attr("leftpx")),
+                    top: parseFloat($pin.attr("toppx"))
                 };
                 pointAsPercent.left += (100/boundaryDimensions.width) * (pickupPoint.left - startPoint.left);
                 pointAsPercent.top += (100/boundaryDimensions.height) * (pickupPoint.top - startPoint.top);
@@ -438,13 +438,13 @@ define(function(require) {
             
 
             var positionAsPixel = {
-                left: Math.round((pagePoint.left - boundaryOffset.left - pinCenterOffset.left)),
-                top:  Math.round((pagePoint.top - boundaryOffset.top - pinCenterOffset.top))
+                left: ((pagePoint.left - boundaryOffset.left - pinCenterOffset.left)),
+                top:  ((pagePoint.top - boundaryOffset.top - pinCenterOffset.top))
             };
 
             var positionAsPercent = {
-                left: Math.round((100 / boundaryDimensions.width) * positionAsPixel.left),
-                top:  Math.round((100 / boundaryDimensions.height) * positionAsPixel.top)
+                left: ((100 / boundaryDimensions.width) * positionAsPixel.left),
+                top:  ((100 / boundaryDimensions.height) * positionAsPixel.top)
             };
 
             $pin.css({
@@ -471,8 +471,8 @@ define(function(require) {
             case "percent":
                 //convert element positioning to pixel format using the saved positions
                 var px = {
-                    top: parseInt($pin.attr("toppx")),
-                    left: parseInt($pin.attr("leftpx"))  
+                    top: parseFloat($pin.attr("toppx")),
+                    left: parseFloat($pin.attr("leftpx"))  
                 };
                 var css = {
                     left: px.left + "px",
@@ -488,8 +488,8 @@ define(function(require) {
 
                 //save start click point to element
                 var startPointAsPixel = {
-                    left: Math.round((fromPoint.left - boundaryOffset.left - pinCenterOffset.left)),
-                    top:  Math.round((fromPoint.top - boundaryOffset.top - pinCenterOffset.top))
+                    left: ((fromPoint.left - boundaryOffset.left - pinCenterOffset.left)),
+                    top:  ((fromPoint.top - boundaryOffset.top - pinCenterOffset.top))
                 };
                 var attr = {
                     mode: "pixel",
