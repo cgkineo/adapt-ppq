@@ -398,6 +398,16 @@ define(function(require) {
                 top: $pin.height()
             };
 
+            var pointAsPixel = {
+                left: Math.round((pagePoint.left - boundaryOffset.left)),
+                top:  Math.round((pagePoint.top - boundaryOffset.top))
+            };
+
+            var pointAsPercent = {
+                left: Math.round((100 / boundaryDimensions.width) * pointAsPixel.left),
+                top:  Math.round((100 / boundaryDimensions.height) * pointAsPixel.top)
+            };
+
             //startPoint is used for dragstart/dragend mouse to image offsets
             var startPoint = {
                 left: parseInt($pin.attr("leftstart")),
@@ -408,19 +418,13 @@ define(function(require) {
                     left: parseInt($pin.attr("leftpx")),
                     top: parseInt($pin.attr("toppx"))
                 };
+                pointAsPercent.left += (100/boundaryDimensions.width) * (pickupPoint.left - startPoint.left);
+                pointAsPercent.top += (100/boundaryDimensions.height) * (pickupPoint.top - startPoint.top);
+
                 pinCenterOffset.left -= pickupPoint.left - startPoint.left;
-                pinCenterOffset.top -= pickupPoint.top - startPoint.top;
+                pinCenterOffset.top -= pickupPoint.top - startPoint.top;                
             }
-
-            var pointAsPixel = {
-                left: Math.round((pagePoint.left - boundaryOffset.left)),
-                top:  Math.round((pagePoint.top - boundaryOffset.top))
-            };
-
-            var pointAsPercent = {
-                left: Math.round((100 / boundaryDimensions.width) * pointAsPixel.left),
-                top:  Math.round((100 / boundaryDimensions.height) * pointAsPixel.top)
-            };
+            
 
             var positionAsPixel = {
                 left: Math.round((pagePoint.left - boundaryOffset.left - pinCenterOffset.left)),
