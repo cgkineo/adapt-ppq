@@ -1,68 +1,69 @@
 {
-    "_id":"c-04",
-    "_parentId":"b-05",
+    "_id":"c-35",
+    "_parentId":"b-20",
     "_type":"component",
     "_component":"ppq",
     "_classes":"",
-    "_layout":"",
+    "_layout":"full",
     "title":"PPQ",
     "displayTitle":"PPQ",
-    "body":"Body",
+    "body":"Select 50, 27 and 42",
     "instruction":"",
+    "_isResetOnRevisit": false,
     "_attempts":1,
     "_questionWeight":1,
-    "_developerMode":true,
+    "_developerMode":false,
     "_pinboardDesktop": {
-        "src": "course/en/images/hotgraphic.png",
+        "src": "assets/ppq-example.png",
         "alt": "alt text",
         "title": "title text"
     },
     "_pinboardMobile": {
-        "src": "course/en/images/ppq-mobile.png",
+        "src": "assets/ppq-example.png",
         "alt": "alt text",
         "title": "title text"
     },
     "_items": [
         {
             "desktop": {
-                "left": 20,
-                "top": 48,
-                "width": 10,
-                "height": 10 
+                "left": 0,
+                "top": 0,
+                "width": 45,
+                "height": 45 
             },
             "mobile": {
-                "left": 20,
-                "top": 70,
-                "width": 20,
-                "height": 20 
+                "left": 0,
+                "top": 0,
+                "width": 45,
+                "height": 45 
             }
         },
         {
             "desktop": {
-                "left": 40,
-                "top": 48,
-                "width": 10,
-                "height": 10 
+                "left": 62,
+                "top": 62,
+                "width": 38,
+                "height": 38 
             },
             "mobile": {
-                "left": 40,
-                "top": 40,
-                "width": 20,
-                "height": 20 
+                "left": 62,
+                "top": 62,
+                "width": 38,
+                "height": 38 
             }
         },
         {
             "desktop": {
-                "left": 60,
-                "top": 48,
-                "width": 10,
-                "height": 10 
+                "left": 75,
+                "top": 0,
+                "width": 25,
+                "height": 25 
             },
             "mobile": {
-                "left": 60,
-                "top": 10,
-                "width": 20,
-                "height": 20 
+                "left": 75,
+                "top": 0,
+                "width": 25,
+                "height": 25 
             }
         }
     ],
@@ -79,7 +80,9 @@
         "submit":"Submit",
         "reset":"Reset",
         "showCorrectAnswer":"Model Answer",
-        "hideCorrectAnswer":"Your Answer",
-        "resetPins":"Reset Pins"
+        "hideCorrectAnswer":"Your Answer"
+    }, 
+    "_pageLevelProgress": {
+        "_isEnabled": true
     }
-}
+},

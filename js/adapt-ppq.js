@@ -44,20 +44,24 @@ define(function(require) {
         },
         onQuestionRendered: function() {
             //console.log('PPQ: onQuestionRendered');
-            this.$el.imageready(_.bind(function() {
-                this.setReadyStatus();
-            }, this));
             this.$pins = this.$el.find('.ppq-pin');
             this.$boundary = this.$el.find('#ppq-boundary');
+            this.$el.imageready(_.bind(function() {
+                this.setReadyStatus();
+                this.$boundary.css({
+                    width: this.$('img').width() + "px"
+                });
+            }, this));
             if (this.model.get("_isSubmitted")) return;
             this.$pins.each(_.bind(this.attachDragHandles, this));
+
         },
 
 
         attachDragHandles: function(index, item) {
             if (item._dragger !== undefined) return;
             item._dragger = new Draggabilly(item, {
-                container: this.$boundary[0]
+                containment: this.$boundary[0]
             });
             item._dragger.on("dragStart", _.bind(this.dragStart, this));
             item._dragger.on("dragEnd", _.bind(this.dragEnd, this));
@@ -149,6 +153,8 @@ define(function(require) {
 
             var correctCount = 0;
 
+            var correctZoneAnswers = {};
+
             this.$pins.each(function (index, item) {
                 var $pin = $(item);
                 var point = {
@@ -171,15 +177,25 @@ define(function(require) {
                         point.top >= mediaZone.top &&
                         point.left <= mediaZone.left+mediaZone.width &&
                         point.top <= mediaZone.top+mediaZone.height) {
-                        zone._isCorrect = isCorrect = true;
-                        $pin.attr("zone", index);
-                        correctCount++;
+                        
+                        if (correctZoneAnswers[index] === undefined) correctZoneAnswers[index] = 1;
+                        else correctZoneAnswers[index]++;
+
+                        if (correctZoneAnswers[index] > 1) {
+                            isCorrect = false;
+                            $pin.removeAttr("zone");
+                        } else {
+                            zone._isCorrect = isCorrect = true;
+                            $pin.attr("zone", index);
+                            correctCount++;    
+                        }
                     }
                 });
                 if (!isCorrect) {
                     $pin.attr("zone", "-1");
                 }
             });
+
 
             if (correctCount > 1) this.model.set('_isAtLeastOneCorrectSelection', true);
             var correct = (correctCount === this.$pins.length);
@@ -341,6 +357,8 @@ define(function(require) {
 
         },
         restoreUserAnswer: function() {
+            this.$pins = this.$el.find('.ppq-pin');
+            this.$boundary = this.$el.find('#ppq-boundary');
             var _userAnswer = this.model.get("_userAnswer");
             var _items = this.model.get("_items");
             var isCorrectAnswer = this.model.get("_isCorrectAnswer");
@@ -350,7 +368,7 @@ define(function(require) {
                 $(this.$pins[index]).css({
                     top: item.per.top + "%",
                     left: item.per.left + "%"
-                }).removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect ? "item-correct" : "item-incorrect" ) );
+                }).addClass("in-use").removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect ? "item-correct" : "item-incorrect" ) );
             }, this));
         },
         restoreAnswer: function(newAnswers) {
@@ -363,7 +381,7 @@ define(function(require) {
                 $(this.$pins[index]).css({
                     top: item.top + "%",
                     left: item.left + "%"
-                }).removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect || isCorrectAnswer ? "item-correct" : "item-incorrect" ) );
+                }).addClass("in-use").removeClass("item-incorrect").removeClass("item-correct").addClass( (_items[index]._isCorrect || isCorrectAnswer ? "item-correct" : "item-incorrect" ) );
             }, this));
         },
         onTouchPlacePin: function(event) {
