@@ -52,15 +52,15 @@ define(function(require) {
             this.$el.imageready(_.bind(function() {
                 this.setReadyStatus();
             }, this));
-            this.$el.find("img").each(function(index, item) {
+           this.$el.find("img").each(_.bind(function(index, item) {
                 var img = new Image();
-                $(img).load(function() {
+                $(img).load(_.bind(function() {
                     this.$boundary.css({
-                        width: this.$('img').width() + "px"
+                        width: $(img)[0].naturalWidth + "px"
                     });
-                });
+                }, this));
                 img.src = item.src;
-            });
+            }, this));
             if (this.model.get("_isSubmitted")) return;
             this.$pins.each(_.bind(this.attachDragHandles, this));
 
