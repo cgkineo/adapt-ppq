@@ -20,6 +20,9 @@ define(function(require) {
             this.setLayout();
             this.listenTo(Adapt, 'device:changed', this.handleDeviceChanged);
             this.listenTo(Adapt, 'device:resize', this.handleDeviceResize);
+            $(window).resize(_.bind(function() {
+                this.handleDeviceResize();
+            }, this));
         },
         setLayout: function() {
             //console.log('PPQ: setLayout');
@@ -48,10 +51,16 @@ define(function(require) {
             this.$boundary = this.$el.find('#ppq-boundary');
             this.$el.imageready(_.bind(function() {
                 this.setReadyStatus();
-                this.$boundary.css({
-                    width: this.$('img').width() + "px"
-                });
             }, this));
+            this.$el.find("img").each(function(index, item) {
+                var img = new Image();
+                $(img).load(function() {
+                    this.$boundary.css({
+                        width: this.$('img').width() + "px"
+                    });
+                });
+                img.src = item.src;
+            });
             if (this.model.get("_isSubmitted")) return;
             this.$pins.each(_.bind(this.attachDragHandles, this));
 
