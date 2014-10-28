@@ -206,7 +206,7 @@ define(function(require) {
             });
 
 
-            if (correctCount > 1) this.model.set('_isAtLeastOneCorrectSelection', true);
+            if (correctCount >= 1) this.model.set('_isAtLeastOneCorrectSelection', true);
             var correct = (correctCount === this.$pins.length);
 
 
