@@ -6,6 +6,11 @@ define(function(require) {
 
     var PPQ = QuestionView.extend({
 
+        componentDimensions: {
+            height: 0,
+            width: 0
+        },
+
         events: {
             "click .ppq-pinboard":"placePin",
             "click .ppq-icon": "preventDefault"
@@ -49,7 +54,10 @@ define(function(require) {
                     }
                 });
 
-
+                _.extend(this.componentDimensions, {
+                    height: this.$("#ppq-boundary").height(),
+                    width: this.$("#ppq-boundary").width()
+                });
 
                 this.setReadyStatus();
                 if (this.model.get("_isComplete") && this.model.get("_isInteractionsComplete")) {
@@ -84,6 +92,15 @@ define(function(require) {
         },
 
         handleDeviceChanged: function() {
+
+            var componentDimensions = {
+                height: this.$("#ppq-boundary").height(),
+                width: this.$("#ppq-boundary").width()
+            };
+            if (this.componentDimensions.height == componentDimensions.height && this.componentDimensions.width == componentDimensions.width) {
+                this.componentDimensions = componentDimensions;
+                return;
+            }
 
             this.$el.css("display:block");
             
@@ -164,6 +181,17 @@ define(function(require) {
         },
 
         handleDeviceResize: function() {
+
+            var componentDimensions = {
+                height: this.$("#ppq-boundary").height(),
+                width: this.$("#ppq-boundary").width()
+            };
+            if (this.componentDimensions.height == componentDimensions.height && this.componentDimensions.width == componentDimensions.width) {
+                this.componentDimensions = componentDimensions;
+                return;
+            }
+
+
             this.$el.css("display:block");
             // Calls resetPins then if complete adds back classes that are required to show the completed state.
             this.resetPins();
@@ -180,11 +208,11 @@ define(function(require) {
         setLayout: function() {
 
             //Setlayout for view. This is also called when device changes.
-            if (Adapt.device.screenSize == "medium" || Adapt.device.screenSize == "large") {
+            if (Adapt.device.screenSize == "large") {
                 this.model.set({
                     desktopLayout:true
                 });
-            } else if (Adapt.device.screenSize == "small") {
+            } else if (Adapt.device.screenSize == "medium" || Adapt.device.screenSize == "small") {
                 this.model.set({
                     desktopLayout:false
                 });
