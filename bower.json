@@ -1,15 +1,17 @@
 {
-  "name": "adapt-ppq",
-  "version": "0.0.1",
-  "homepage": "",
-  "authors": [
-    ""
-  ],
-  "description": "",
-  "main": "/js/adapt-ppq.js",
-  "keywords": [
-    "adapt-plugin",
-    "adapt-component"
-  ],
-  "license": "GPLv3"
+    "name": "adapt-ppq",
+    "repository": "git://github.com/cgkineo/adapt-ppq",
+    "framework": "^2.0.0",
+    "version": "2.0.0",
+    "homepage": "https://github.com/cgkineo/adapt-ppq",
+    "issues": "https://github.com/cgkineo/adapt-ppq/issues/",
+    "displayName": "Pinpoint Question",
+    "component": "ppq",
+    "description": "A question component that requires users to correctly position one or more pins on an image",
+    "main": "/js/adapt-ppq.js",
+    "keywords": [
+        "adapt-plugin",
+        "adapt-component"
+    ],
+    "license": "GPLv3"
 }
