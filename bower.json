@@ -1,11 +1,12 @@
 {
   "name": "adapt-ppq",
-  "version": "0.0.1",
-  "homepage": "",
-  "authors": [
-    ""
-  ],
-  "description": "",
+  "version": "0.1.0",
+  "framework": "^2.0.0",
+  "homepage": "https://github.com/cgkineo/adapt-ppq",
+  "issues": "https://github.com/cgkineo/adapt-ppq/issues/new?title=ppq%3A%20please%20enter%20a%20brief%20summary%20of%20the%20issue%20here&body=please%20provide%20a%20full%20description%20of%20the%20problem,%20including%20steps%20on%20how%20to%20replicate,%20what%20browser(s)/device(s)%20the%20problem%20occurs%20on%20and,%20where%20helpful,%20screenshots.",
+  "displayName" : "Pin Point Question",
+  "component" : "ppq",
+  "description": "A question component that requires users to correctly position one or more pins on an image.",
   "main": "/js/adapt-ppq.js",
   "keywords": [
     "adapt-plugin",
