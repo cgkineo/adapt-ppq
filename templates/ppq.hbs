@@ -1,25 +1,25 @@
 <div class="ppq-inner component-inner" role="region" aria-label="{{_accessibility._ariaRegions.ppq}}">
     {{> component this}}
     <div class="ppq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
-    	<div class="ppq-pinboard-container">
-    		<div class="ppq-pinboard-container-inner">
+      <div class="ppq-pinboard-container">
+        <div class="ppq-pinboard-container-inner">
 
-    			{{#if _developerMode}}
-	    			{{#each _items}}
-	    				{{#if ../../desktopLayout}}
-				    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
-				    	{{else}}
-				    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
-				    	{{/if}}
-	      			{{/each}}
-    			{{/if}}
+          {{#if _developerMode}}
+            {{#each _items}}
+              {{#unless ../../desktopLayout}}
+                <div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
+              {{else}}
+                <div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
+              {{/unless}}
+              {{/each}}
+          {{/if}}
 
                 <div id="ppq-boundary">
-    			{{#if desktopLayout}}
-    				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
-    			{{else}}
-    				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardMobile.src}}" title="{{_pinboardMobile.title}}" alt="{{_pinboardMobile.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
-    			{{/if}}
+          {{#if desktopLayout}}
+            <img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
+          {{else}}
+            <img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardMobile.src}}" title="{{_pinboardMobile.title}}" alt="{{_pinboardMobile.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
+          {{/if}}
 
                 {{#if _selectable}}
                     {{#each _selectors}}
@@ -30,18 +30,18 @@
                         </a>
                     {{/each}}
                 {{else}}
-        			{{#each _items}}
-    			    	<a class="ppq-pin" href="#" data-id="item-{{@index}}">
-    			    		<div class="ppq-icon ppq-pin-icon icon icon-pin"></div>
-    			    		<div class="ppq-icon ppq-correct-icon icon icon-tick"></div>
-    			    		<div class="ppq-icon ppq-incorrect-icon icon icon-cross"></div>
-    			    	</a>
-          			{{/each}}
+              {{#each _items}}
+                <a class="ppq-pin" href="#" data-id="item-{{@index}}">
+                  <div class="ppq-icon ppq-pin-icon icon icon-pin"></div>
+                  <div class="ppq-icon ppq-correct-icon icon icon-tick"></div>
+                  <div class="ppq-icon ppq-incorrect-icon icon icon-cross"></div>
+                </a>
+                {{/each}}
                 {{/if}}
                 </div>
 
-    		</div>
-    	</div>
+        </div>
+      </div>
     </div>
     <div>
         <div class="buttons">
