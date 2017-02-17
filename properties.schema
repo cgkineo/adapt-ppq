@@ -1,335 +1,473 @@
 {
-    "type": "object",
-    "$schema": "http://json-schema.org/draft-04/schema",
-    "id": "http://jsonschema.net",
-    "$ref": "http://localhost/plugins/content/component/model.schema",
-    "globals": {
-        "ariaRegion": {
-            "type": "string",
-            "required": true,
-            "default": "A question component that requires users to correctly position one or more pins on an image.",
-            "inputType": "Text",
-            "validators": []
-        }
-    },
-    "properties": {
-        "_supportedLayout": {
-            "type": "string",
-            "required": true,
-            "enum": [
-                "full-width",
-                "half-width",
-                "both"
-            ],
-            "default": "full-width",
-            "editorOnly": true
-        },
-        "instruction": {
-            "type": "string",
-            "required": false,
-            "default": "",
-            "inputType": "Text",
-            "validators": [],
-            "help": "This is the instruction text"
-        },
-        "_developerMode": {
-            "type": "boolean",
-            "required": false,
-            "default": false,
-            "title": "Developer mode",
-            "inputType": {
-                "type": "Boolean",
-                "options": [
-                    true,
-                    false
-                ]
-            },
-            "validators": [],
-            "help": "Select 'true' to show correct zones in preview"
-        },
-        "_pinboardDesktop": {
-            "type": "object",
-            "required": false,
-            "title": "Pin board desktop",
-            "properties": {
-                "src": {
-                    "type": "string",
-                    "required": true,
-                    "default": "",
-                    "inputType": "Asset:image",
-                    "validators": [
-                        "required"
-                    ],
-                    "help": "This is the image that appears behind the pins"
-                },
-                "alt": {
-                    "type": "string",
-                    "required": false,
-                    "default": "",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Alternative text for this image"
-                },
-                "title": {
-                    "type": "string",
-                    "required": false,
-                    "default": "",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Title text for this image"
-                }
-            }
-        },
-        "_pinboardMobile": {
-            "type": "object",
-            "required": false,
-            "title": "Pin board desktop",
-            "properties": {
-                "src": {
-                    "type": "string",
-                    "required": true,
-                    "default": "",
-                    "inputType": "Asset:image",
-                    "validators": [
-                        "required"
-                    ],
-                    "help": "This is the image that appears behind the pins"
-                },
-                "alt": {
-                    "type": "string",
-                    "required": false,
-                    "default": "",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Alternative text for this image"
-                },
-                "title": {
-                    "type": "string",
-                    "required": false,
-                    "default": "",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Title text for this image"
-                }
-            }
-        },
-        "_items": {
-            "type": "array",
-            "required": true,
-            "title": "Correct Zones",
-            "items": {
-                "type": "object",
-                "required": true,
-                "properties": {
-                    "desktop": {
-                        "type": "object",
-                        "required": true,
-                        "title": "Desktop Correct Zone",
-                        "properties": {
-                            "left": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Left",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Left position of correct zone (percentage)"
-                            },
-                            "top": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Top",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Top position of correct zone (percentage)"
-                            },
-                            "width": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Width",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Width of correct zone (percentage)"
-                            },
-                            "height": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Height",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Height of correct zone (percentage)"
-                            }
-                        }
-                    },
-                    "mobile": {
-                        "type": "object",
-                        "required": true,
-                        "title": "Mobile Correct Zone",
-                        "properties": {
-                            "left": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Left",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Left position of correct zone (percentage)"
-                            },
-                            "top": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Top",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Top position of correct zone (percentage)"
-                            },
-                            "width": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Width",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Width of correct zone (percentage)"
-                            },
-                            "height": {
-                                "type": "number",
-                                "required": true,
-                                "default": 0,
-                                "title": "Height",
-                                "inputType": "Number",
-                                "validators": [
-                                    "required",
-                                    "number"
-                                ],
-                                "help": "Height of correct zone (percentage)"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "_feedback": {
-            "type": "object",
-            "required": true,
-            "title": "Feedback",
-            "properties": {
-                "correct": {
-                    "type": "string",
-                    "required": true,
-                    "default": "",
-                    "title": "Correct",
-                    "inputType": "TextArea",
-                    "validators": [],
-                    "help": "Correct feedback for this question",
-                    "translatable": true
-                },
-                "_incorrect": {
-                    "type": "object",
-                    "required": true,
-                    "title": "Incorrect Feedback",
-                    "properties": {
-                        "final": {
-                            "type": "string",
-                            "required": true,
-                            "default": "",
-                            "title": "Incorrect Final",
-                            "inputType": "TextArea",
-                            "validators": [],
-                            "help": "Incorrect feedback for the final attempt",
-                            "translatable": true
-                        }
-                    }
-                },
-                "_partlyCorrect": {
-                    "type": "object",
-                    "required": false,
-                    "properties": {
-                        "final": {
-                            "type": "string",
-                            "required": false,
-                            "default": "",
-                            "title": "Partly Correct Final",
-                            "inputType": "TextArea",
-                            "validators": [],
-                            "help": "Partly correct feedback for the final attempt",
-                            "translatable": true
-                        }
-                    }
-                }
-            }
-        },
-        "_buttons": {
-            "type": "object",
-            "title": "Buttons",
-            "required": true,
-            "properties": {
-                "submit": {
-                    "type": "string",
-                    "required": true,
-                    "default": "Submit",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Button label text for the submit button"
-                },
-                "reset": {
-                    "type": "string",
-                    "required": true,
-                    "default": "Reset",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Button label text for the reset button"
-                },
-                "showCorrectAnswer": {
-                    "type": "string",
-                    "required": true,
-                    "default": "Model Answer",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Button label text for the model answer button"
-                },
-                "hideCorrectAnswer": {
-                    "type": "string",
-                    "required": true,
-                    "default": "Your Answer",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Button label text for the your answer button"
-                },
-                "resetPins": {
-                    "type": "string",
-                    "required": true,
-                    "default": "Reset Pins",
-                    "inputType": "Text",
-                    "validators": [],
-                    "help": "Button label text for the reset pins button"
-                }
-            }
-        }
+  "type": "object",
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "id": "http://jsonschema.net",
+  "$ref": "http://localhost/plugins/content/component/model.schema",
+  "globals": {
+    "ariaRegion": {
+      "type": "string",
+      "required": true,
+      "default": "A question component that requires users to correctly position one or more pins on an image.",
+      "inputType": "Text",
+      "validators": [],
+      "translatable": true
     }
+  },
+  "properties": {
+    "_supportedLayout": {
+      "type": "string",
+      "required": true,
+      "enum": ["full-width", "half-width", "both"],
+      "default": "half-width",
+      "editorOnly": true
+    },
+    "instruction": {
+      "type": "string",
+      "required": false,
+      "default": "",
+      "inputType": "Text",
+      "validators": [],
+      "help": "This is the instruction text",
+      "translatable": true
+    },
+    "_developerMode": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "title": "Developer mode",
+      "inputType": {
+        "type": "Boolean",
+        "options": [
+          true,
+          false
+        ]
+      },
+      "validators": [],
+      "help": "Select 'true' to show correct zones in preview"
+    },
+    "_pinboardDesktop": {
+      "type": "object",
+      "required": false,
+      "title": "Pin board desktop",
+      "properties": {
+        "src": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "inputType": "Asset:image",
+          "validators": [
+            "required"
+          ],
+          "help": "This is the image that appears behind the pins"
+        },
+        "alt": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "inputType": "Text",
+          "validators": [],
+          "help": "Alternative text for this image",
+          "translatable": true
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "inputType": "Text",
+          "validators": [],
+          "help": "Title text for this image",
+          "translatable": true
+        }
+      }
+    },
+    "_pinboardMobile": {
+      "type": "object",
+      "required": false,
+      "title": "Pin board desktop",
+      "properties": {
+        "src": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "inputType": "Asset:image",
+          "validators": [
+            "required"
+          ],
+          "help": "This is the image that appears behind the pins"
+        },
+        "alt": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "inputType": "Text",
+          "validators": [],
+          "help": "Alternative text for this image",
+          "translatable": true
+        },
+        "title": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "inputType": "Text",
+          "validators": [],
+          "help": "Title text for this image",
+          "translatable": true
+        }
+      }
+    },
+    "_items": {
+      "type": "array",
+      "required": true,
+      "title": "Correct Zones",
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "desktop": {
+            "type": "object",
+            "required": true,
+            "title": "Desktop Correct Zone",
+            "properties": {
+              "left": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Left",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Left position of correct zone (percentage)"
+              },
+              "top": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Top",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Top position of correct zone (percentage)"
+              },
+              "width": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Width",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Width of correct zone (percentage)"
+              },
+              "height": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Height",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Height of correct zone (percentage)"
+              }
+            }
+          },
+          "mobile": {
+            "type": "object",
+            "required": true,
+            "title": "Mobile Correct Zone",
+            "properties": {
+              "left": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Left",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Left position of correct zone (percentage)"
+              },
+              "top": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Top",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Top position of correct zone (percentage)"
+              },
+              "width": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Width",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Width of correct zone (percentage)"
+              },
+              "height": {
+                "type": "number",
+                "required": true,
+                "default": 0,
+                "title": "Height",
+                "inputType": "Number",
+                "validators": [
+                  "required",
+                  "number"
+                ],
+                "help": "Height of correct zone (percentage)"
+              }
+            }
+          }
+        }
+      }
+    },
+    "_feedback": {
+      "type": "object",
+      "required": false,
+      "title": "Feedback",
+      "properties":{
+        "correct": {
+          "type":"string",
+          "required": false,
+          "default": "",
+          "title": "Correct",
+          "inputType": "TextArea",
+          "validators": [],
+          "help": "Correct feedback for this question",
+          "translatable": true
+        },
+        "_incorrect": {
+          "type":"object",
+          "required": false,
+          "title": "Incorrect Feedback",
+          "properties":{
+            "final": {
+              "type":"string",
+              "required": false,
+              "default": "",
+              "title": "Incorrect Final",
+              "inputType": "TextArea",
+              "validators": [],
+              "help": "Incorrect feedback for the final attempt",
+              "translatable": true
+            },
+            "notFinal": {
+              "type":"string",
+              "required": false,
+              "default": "",
+              "title": "Incorrect Not Final",
+              "inputType": "TextArea",
+              "validators": [],
+              "help": "Incorrect feedback for any attempt apart from the last attempt",
+              "translatable": true
+            }
+          }
+        },
+        "_partlyCorrect": {
+          "type":"object",
+          "required":false,
+          "properties":{
+            "final": {
+              "type":"string",
+              "required": false,
+              "default": "",
+              "title": "Partly Correct Final",
+              "inputType": "TextArea",
+              "validators": [],
+              "help": "Partly correct feedback for the final attempt",
+              "translatable": true
+            },
+            "notFinal": {
+              "type":"string",
+              "required": false,
+              "default": "",
+              "title": "Partly Correct Not Final",
+              "inputType": "TextArea",
+              "validators": [],
+              "help": "Partly correct feedback for any attempt apart from the last attempt",
+              "translatable": true
+            }
+          }
+        }
+      }
+    },
+    "_buttons": {
+      "type": "object",
+      "title": "Buttons",
+      "required": false,
+      "properties": {
+        "_submit": {
+          "type": "object",
+          "title": "Submit",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text for the submit button",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the submit button",
+              "translatable": true
+            }
+          }
+        },
+        "_reset": {
+          "type": "object",
+          "title": "Reset",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text for the reset button",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the reset button",
+              "translatable": true
+            }
+          }
+        },
+        "_showCorrectAnswer": {
+          "type": "object",
+          "title": "Show Correct Answer",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to show the model answer",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the show model answer button",
+              "translatable": true
+            }
+          }
+        },
+        "_hideCorrectAnswer": {
+          "type": "object",
+          "title": "Hide Correct Answer",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to hide the model answer",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the hide model answer button",
+              "translatable": true
+            }
+          }
+        },
+        "_showFeedback": {
+          "type": "object",
+          "title": "Show Feedback",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to show feedback",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the show feedback button",
+              "translatable": true
+            }
+          }
+        },
+        "resetPins": {
+          "type": "object",
+          "title": "Reset Pins",
+          "properties": {
+            "buttonText": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Button label text to reset pins",
+              "translatable": true
+            },
+            "ariaLabel": {
+              "type": "string",
+              "required": false,
+              "default": "",
+              "title": "",
+              "inputType": "QuestionButton",
+              "validators": [],
+              "help": "Aria label for the reset pins button",
+              "translatable": true
+            }
+          }
+        }
+      }
+    }
+  }
 }
