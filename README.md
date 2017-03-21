@@ -6,17 +6,17 @@ A question component that requires users to correctly position one or more pins 
 
 The existing PPQ component was found to have the following problems:
 
- 1 Changing orientation resets pins - unnecessary when image and aspect not affected (usability)
- 2 Resizing browser window breaks pin positions (bug)
- 3 Possible to overlap pins (usability)
- 4 Attempting to move a pin to a target that already has a pin sends pin back to original position (information leak)
- 5 Cannot add new pin if selected position is in a target that already has a pin (usability)
- 6 Broken restore user answer functionality
- 7 Uses deprecated (and removed) properties e.g. _isInteractionsComplete
- 8 Does not follow modern conventions (e.g. missing superclass overrides)
- 9 Does not handle restoring desktop answers in mobile and vice versa
-10 Lots of unnecessary string parsing and positional conversions
-11 Additional issues listed on GitHub
+1. Changing orientation resets pins - unnecessary when image and aspect not affected (usability)
+2. Resizing browser window breaks pin positions (bug)
+3. Possible to overlap pins (usability)
+4. Attempting to move a pin to a target that already has a pin sends pin back to original position (information leak)
+5. Cannot add new pin if selected position is in a target that already has a pin (usability)
+6. Broken restore user answer functionality
+7. Uses deprecated (and removed) properties e.g. _isInteractionsComplete
+8. Does not follow modern conventions (e.g. missing superclass overrides)
+9. Does not handle restoring desktop answers in mobile and vice versa
+10. Lots of unnecessary string parsing and positional conversions
+11. Additional issues listed on GitHub
 
 It was decided that a rewrite would the the best course of action to address these problems.
 
@@ -48,17 +48,17 @@ A user may complete the component on desktop and then view the component on mobi
 `_maxSelection` (`number`): the maximum number of pins the user can add to the image. Optional.
 
 `_pinboardDesktop` (`object`): the image to use when the component is displayed on a desktop-sized display
-> `src` (`string`): path to image
-> `alt` (`string`): alt text
-> `title` (`string`): image title
+- `src` (`string`): path to image
+- `alt` (`string`): alt text
+- `title` (`string`): image title
 
 `_pinboardMobile` (`object`): the image to use when the component is displayed on a mobile-sized display
-> `src` (`string`): path to image
-> `alt` (`string`): alt text
-> `title` (`string`): image title
+- `src` (`string`): path to image
+- `alt` (`string`): alt text
+- `title` (`string`): image title
 
 `_items` (`array`): a list of areas, in each of which the user is expected to place a single pin
-> `left` (`number`): left position (x-coordinate) of area (percentage)
-> `top` (`number`): top position (y-coordinate) of area (percentage)
-> `width` (`number`): width of the area (percentage)
-> `height` (`number`): height of the area (percentage)
+- `left` (`number`): left position (x-coordinate) of area (percentage)
+- `top` (`number`): top position (y-coordinate) of area (percentage)
+- `width` (`number`): width of the area (percentage)
+- `height` (`number`): height of the area (percentage)
