@@ -5,10 +5,12 @@
     "_component": "ppq",
     "_classes": "",
     "_layout": "full",
-    "_canShowModelAnswer": true,
+    "_attempts":1,
     "_shouldDisplayAttempts": false,
-    "_attempts": 1,
-    "_questionWeight": 1,
+    "_questionWeight":1,
+    "_selectable":1,
+    "_canShowModelAnswer": true,
+    "_canShowMarking": true,
     "_developerMode": true,
     "title": "PPQ",
     "displayTitle": "PPQ",
@@ -76,32 +78,5 @@
         "_incorrect": {
             "final": "Unfortunately this is the incorrect feedback."
         }
-    },
-    "_buttons": {
-        "_submit": {
-            "buttonText": "Submit",
-            "ariaLabel": "Select here to submit your answer."
-        },
-        "_reset": {
-            "buttonText": "Reset",
-            "ariaLabel": ""
-        },
-        "_showCorrectAnswer": {
-            "buttonText": "Correct Answer",
-            "ariaLabel": ""
-        },
-        "_hideCorrectAnswer": {
-            "buttonText": "My Answer",
-            "ariaLabel": ""
-        },
-        "_showFeedback": {
-            "buttonText": "Show feedback",
-            "ariaLabel": ""
-        },
-        "remainingAttemptsText": "attempts remaining",
-        "remainingAttemptText": "final attempt"
-    },
-    "_pageLevelProgress": {
-        "_isEnabled": true
     }
 }
