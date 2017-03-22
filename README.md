@@ -18,7 +18,7 @@ The existing PPQ component was found to have the following problems:
 10. Lots of unnecessary string parsing and positional conversions
 11. Additional issues listed on GitHub
 
-It was decided that a rewrite would the the best course of action to address these problems.
+It was decided that a rewrite would be the best course of action to address these problems.
 
 # The new PPQ component
 
