@@ -21,6 +21,8 @@ define(function(require) {
 
             if (this.model.get('_isSubmitted')) this.showMarking();
 
+            this.checkCompatibility();
+
             return this;
         },
 
@@ -28,18 +30,16 @@ define(function(require) {
             var userAnswer = _.extend([], this.model.get('_userAnswer'));
             var isDesktop = Adapt.device.screenSize != 'small';
 
-            // restore positions if submitted and user answers appropriate to device
-            if (this.model.get('_isSubmitted') && userAnswer.length > 0 && !!userAnswer[0] == isDesktop) {
+            // restore positions if submitted
+            if (this.model.get('_isSubmitted') && userAnswer.length > 0) {
                 userAnswer.shift();
-            } else {
-                userAnswer = [];
             }
 
             // pre-population simplifies code (particularly hide/show user answer)
-            for (var i=0, l=this._pinViews.length; i<l; i++) {
+            for (var i=0, l=this.model.get('_maxSelection'); i<l; i++) {
                 var pin = new PinView();
-                pin.setPosition(userAnswer[i*2], userAnswer[i*2+1]);
-                this._pinViews[i] = pin;
+                pin.setPosition(userAnswer[i*2]/100, userAnswer[i*2+1]/100);
+                this._pinViews.push(pin);
                 this.$('.ppq-boundary').append(pin.$el);
             }
         },
@@ -53,7 +53,7 @@ define(function(require) {
 
             this.model.set('_maxSelection', Math.max(this.model.get('_maxSelection') || 0, this.model.get('_items').length));
 
-            this._pinViews = new Array(this.model.get('_maxSelection'));
+            this._pinViews = [];
 
             this.restoreUserAnswers();
         },
@@ -149,7 +149,33 @@ define(function(require) {
 
             this.setupCorrectZones();
 
-            this.updatePinPositions();
+            if (this.model.get('_resetPinsOnPinboardChange')) {
+                if (this.model.get('_isSubmitted')) {
+                    this.checkCompatibility();
+                    this.$('.ppq-other-device').toggleClass('display-none', !this.model.get('_showOtherDeviceCompletionMessage'));
+                    this.$('.ppq-pinboard-container, .buttons').toggleClass('display-none', this.model.get('_showOtherDeviceCompletionMessage'));
+                } else {
+                    this.resetPins();
+                }
+            } else {
+                this.updatePinPositions();
+            }
+        },
+
+        checkCompatibility:function() {
+            var isSubmitted = this.model.get('_isSubmitted');
+
+            if (!isSubmitted) return;
+
+            var isDesktop = Adapt.device.screenSize != 'small',
+                isUserAnswerDesktop = this.model.get('_userAnswer')[0] === 1,
+                resetPinsOnPinboardChange = this.model.get('_resetPinsOnPinboardChange');
+
+            if (isSubmitted && isDesktop != isUserAnswerDesktop && resetPinsOnPinboardChange) {
+                this.model.set('_showOtherDeviceCompletionMessage', true);
+            } else {
+                this.model.set('_showOtherDeviceCompletionMessage', false);
+            }
         },
 
         getNextUnusedPin:function() {
@@ -196,7 +222,7 @@ define(function(require) {
                 pin = this._pinViews[i];
                 pos = pin.getPosition();
 
-                if (pos) userAnswer.push(round(pos.percentX, 2), round(pos.percentY, 2));
+                if (pos) userAnswer.push(round(pos.percentX*100, -2), round(pos.percentY*100, -2));
             }
 
             this.model.set('_userAnswer', userAnswer);
@@ -209,7 +235,7 @@ define(function(require) {
             var map = new Array(items.length);
 
             for (var i=1, l=userAnswer.length; i<l; i+=2) {
-                var itemIndex = this.getIndexOfItem(userAnswer[i], userAnswer[i+1], isDesktop);
+                var itemIndex = this.getIndexOfItem(userAnswer[i]/100, userAnswer[i+1]/100, isDesktop);
                 if (itemIndex != -1) map[itemIndex] = true;
             }
 
@@ -303,7 +329,7 @@ define(function(require) {
 
             for (l=userAnswer.length; i<l; i+=2) {
                 pin = this._pinViews[(i-1) >> 1];
-                pin.setPosition(userAnswer[i], userAnswer[i+1]);
+                pin.setPosition(userAnswer[i]/100, userAnswer[i+1]/100);
             }
             for (i=userAnswer.length-1 >> 1, l=this._pinViews.length; i<l; i++) {
                 pin = this._pinViews[i];

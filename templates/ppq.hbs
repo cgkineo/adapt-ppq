@@ -1,7 +1,8 @@
 <div class="ppq-inner component-inner" role="region" aria-label="{{_accessibility._ariaRegions.ppq}}">
     {{> component this}}
     <div class="ppq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
-    	<div class="ppq-pinboard-container">
+        <div class="ppq-other-device {{#unless _showOtherDeviceCompletionMessage}}display-none{{/unless}}">{{{a11y_text _globals._components._ppq.otherDeviceCompletionMessage}}}</div>
+    	<div class="ppq-pinboard-container {{#if _showOtherDeviceCompletionMessage}}display-none{{/if}}">
     		<div class="ppq-pinboard-container-inner">
 
     			{{#if _developerMode}}
