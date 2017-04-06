@@ -12,6 +12,7 @@
     "_canShowModelAnswer": true,
     "_canShowMarking": true,
     "_developerMode": true,
+    "_resetPinsOnPinboardChange": false,
     "title": "PPQ",
     "displayTitle": "PPQ",
     "body": "Body",

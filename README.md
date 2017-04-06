@@ -47,6 +47,7 @@ A user may complete the component on desktop and then view the component on mobi
 
 `_minSelection` (`number`): the minimum number of pins the user must add before being able to submit. Optional.
 `_maxSelection` (`number`): the maximum number of pins the user can add to the image. Optional.
+`_resetPinsOnPinboardChange` (`boolean`): set to `true` if the image content/aspect ratio varies between the desktop and mobile pinboards. Optional.
 
 `_pinboardDesktop` (`object`): the image to use when the component is displayed on a desktop-sized display
 - `src` (`string`): path to image
