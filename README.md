@@ -1,6 +1,6 @@
 # adapt-ppq
 
-A question component that requires users to correctly position one or more pins on an image. The component has one or more targets. The user is required to place a single pin in each target. It is a SCORM interaction of type `choice`.
+A question component that requires users to correctly position one or more pins on an image. The component has one or more targets. The user is required to place a single pin in each target. In SCORM terms it is a type `choice` activity, though for technical reasons it must be implemented as a type `performance` activity. Type `performance` activities are not supported in the underlying SCORM API wrapper, therefore SCORM interactions tracking is not currently supported for this component.
 
 # Rationale
 
@@ -37,10 +37,11 @@ A user may complete the component on desktop and then view the component on mobi
 1. If user has completed component on a desktop and views it on mobile, the component simply shows a message to explain that “the component has been completed on [mobile|desktop]”.
 2. If the component has multiple attempts and the user has made one attempt on desktop and then views the component on mobile, the component should reset the user answer (but preserving attempt count).
 
+**UPDATE**: this has now been resolved, but point 2 has not been implemented because (i) if the user answers correctly, it is counter-intuitive to reset the component and goes against the standard behaviour of Adapt questions and; (ii) if the user has not answered correctly and has attempts remaining the component is automatically reset by the question superclass anyway.
+
 ## Notes
 
-- For SCORM 1.2 interactions tracking would probably need to use `performance` type (as opposed to `choice`) to allow recording of pin positions (as rounded percentages)
-- For data persistence efficiency round to 2 d.p. (pixel accuracy for up to 10000px x 10000px images) - consider using integers as 4 digit integers encode better than 4 digit decimals
+- For data persistence efficiency pin positions are rounded to 2 d.p. (pixel accuracy for up to 10000px x 10000px images) - the values are factored up to allow storage as integers (due to serializer support and better encoding efficiency)
 
 # Configuration
 
