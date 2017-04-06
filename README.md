@@ -47,7 +47,8 @@ A user may complete the component on desktop and then view the component on mobi
 
 `_minSelection` (`number`): the minimum number of pins the user must add before being able to submit. Optional.
 `_maxSelection` (`number`): the maximum number of pins the user can add to the image. Optional.
-`_resetPinsOnPinboardChange` (`boolean`): set to `true` if the image content/aspect ratio varies between the desktop and mobile pinboards. Optional.
+
+`_resetPinsOnPinboardChange` (`boolean`): set to `true` if the image content/aspect ratio varies between the desktop and mobile pinboards. If the user completes the question on one pinboard (e.g. desktop) and later attempts to view the question on the other pinboard (e.g. mobile) a message will be displayed in place of the pinboard. This message can be configured in `course.json` via the `_globals._components._ppq.otherDeviceCompletionMessage` property. Optional.
 
 `_pinboardDesktop` (`object`): the image to use when the component is displayed on a desktop-sized display
 - `src` (`string`): path to image
