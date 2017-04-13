@@ -30,6 +30,8 @@ A user can drop an active pin near or directly onto an incumbent pin.
 
 A configuration will allow the author to specify a level of sensitivity that determines if two pins should be considered overlapping. This sensitivity will be based on the percentage difference in their respective positions. If two pins overlap a policy property will determine whether the active pin is returned to its origin or "nudged" to the side of the incumbent pin. If the pin is "nudged" it will be moved along the vector defined by the two pins' positions.
 
+**UPDATE**: this is unlikely to be implemented due to complexity (mainly due to edge cases). It would be better to consider indicating overlapping pins visually (e.g. a different opacity).
+
 ## 9 Does not handle restoring desktop answers in mobile and vice versa
 
 A user may complete the component on desktop and then view the component on mobile (or vice versa). This only becomes an issue if two separate images have been specified for desktop/mobile that have different content/targets and/or different aspect ratios. The problem was discussed in group and the following approach has been agreed:
