@@ -5,15 +5,13 @@
     	<div class="ppq-pinboard-container {{#if _showOtherDeviceCompletionMessage}}display-none{{/if}}">
     		<div class="ppq-pinboard-container-inner">
 
-    			{{#if _developerMode}}
-	    			{{#each _items}}
-	    				{{#if ../../desktopLayout}}
-				    		<div class="ppq-correct-zone" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
-				    	{{else}}
-				    		<div class="ppq-correct-zone" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
-				    	{{/if}}
-	      			{{/each}}
-    			{{/if}}
+    			{{#each _items}}
+    				{{#if ../../desktopLayout}}
+			    		<div class="ppq-correct-zone {{#unless _developerMode}}display-none{{/unless}}" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
+			    	{{else}}
+			    		<div class="ppq-correct-zone {{#unless _developerMode}}display-none{{/unless}}" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
+			    	{{/if}}
+      			{{/each}}
 
                 <div class="ppq-boundary">
     				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>

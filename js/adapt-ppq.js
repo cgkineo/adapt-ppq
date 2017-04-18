@@ -263,14 +263,17 @@ define(function(require) {
             for (var i=0, l=this._pinViews.length; i<l; i++) {
                 var pin = this._pinViews[i];
                 var pos = pin.getPosition();
-                var itemIndex = this.getIndexOfItem(pos.percentX, pos.percentY);
 
-                // if pin inside item mark as correct, but mark any others in same item as incorrect
-                if (itemIndex != -1 && !map[itemIndex]) {
-                    map[itemIndex] = true;
-                    pin.$el.addClass('correct').removeClass('incorrect');
-                } else {
-                    pin.$el.addClass('incorrect').removeClass('correct');
+                if (pos) {
+                    var itemIndex = this.getIndexOfItem(pos.percentX, pos.percentY);
+
+                    // if pin inside item mark as correct, but mark any others in same item as incorrect
+                    if (itemIndex != -1 && !map[itemIndex]) {
+                        map[itemIndex] = true;
+                        pin.$el.addClass('correct').removeClass('incorrect');
+                    } else {
+                        pin.$el.addClass('incorrect').removeClass('correct');
+                    }
                 }
             }
         },
@@ -345,7 +348,7 @@ define(function(require) {
             var items = this.model.get('_items');
             for (var i=0, l=items.length; i<l; i++) {
                 var zone = isDesktop ? items[i].desktop : items[i].mobile;
-                if (x >= zone.left && y >= zone.top && x <= zone.left+zone.width && y <= zone.top+zone.height) {
+                if (x >= zone.left && y >= zone.top && x < zone.left+zone.width && y < zone.top+zone.height) {
                     return i;
                 }
             }
