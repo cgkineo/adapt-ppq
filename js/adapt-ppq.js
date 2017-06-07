@@ -123,12 +123,14 @@ define(function(require) {
         },
 
         onQuestionRendered:function() {
-            this.$('.ppq-pinboard-container-inner').imageready(_.bind(function() {
+            var $pinboardContainerInner = this.$('.ppq-pinboard-container-inner');
+
+            $pinboardContainerInner.imageready(_.bind(function() {
                 for (var i=0, l=this._pinViews.length; i<l; i++) {
                     var pin = this._pinViews[i];
                     
                     pin.dragObj = new Draggabilly(pin.el, {
-                        containment:'.ppq-pinboard-container-inner'
+                        containment: $pinboardContainerInner
                     });
 
                     if (!this.model.get('_isEnabled')) pin.dragObj.disable();
