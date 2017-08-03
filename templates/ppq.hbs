@@ -6,11 +6,7 @@
     		<div class="ppq-pinboard-container-inner">
 
     			{{#each _items}}
-    				{{#if ../../desktopLayout}}
-			    		<div class="ppq-correct-zone {{#unless _developerMode}}display-none{{/unless}}" style="left:{{desktop.left}}%; top:{{desktop.top}}%; width:{{desktop.width}}%; height:{{desktop.height}}%;"></div>
-			    	{{else}}
-			    		<div class="ppq-correct-zone {{#unless _developerMode}}display-none{{/unless}}" style="left:{{mobile.left}}%; top:{{mobile.top}}%; width:{{mobile.width}}%; height:{{mobile.height}}%;"></div>
-			    	{{/if}}
+			    	<div class="ppq-correct-zone {{#unless ../_developerMode}}display-none{{/unless}}"></div>
       			{{/each}}
 
                 <div class="ppq-boundary">
