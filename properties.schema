@@ -83,7 +83,7 @@
     "_pinboardMobile": {
       "type": "object",
       "required": false,
-      "title": "Pin board desktop",
+      "title": "Pin board mobile",
       "properties": {
         "src": {
           "type": "string",
