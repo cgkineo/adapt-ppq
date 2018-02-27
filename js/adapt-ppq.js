@@ -305,9 +305,11 @@ define(function(require) {
             // map first correctly placed pin to item and log other pins as free for moving
             _.each(this._pinViews, function(pin, pinIndex) {
                 var pos = pin.getPosition();
-                var itemIndex = this.getIndexOfItem(pos.percentX, pos.percentY);
-                if (itemIndex != -1 && !map[itemIndex]) map[itemIndex] = true;
-                else free.push(pin);
+                if (pos) {
+                    var itemIndex = this.getIndexOfItem(pos.percentX, pos.percentY);
+                    if (itemIndex != -1 && !map[itemIndex]) map[itemIndex] = true;
+                    else free.push(pin);
+                }
             }, this);
 
             // ensure every item has a pin
