@@ -1,9 +1,9 @@
-define(function(require) {
-
-	var Adapt = require('coreJS/adapt');
-    var QuestionView = require('coreViews/questionView');
-    var Draggabilly = require('./draggabilly');
-    var round = require('./round');
+define([
+    'core/js/adapt',
+    'core/js/views/questionView',
+    './draggabilly',
+    './round'
+], function(Adapt, QuestionView, Draggabilly, round) {
 
     var Ppq = QuestionView.extend({
 
@@ -299,7 +299,7 @@ define(function(require) {
             var isDesktop = Adapt.device.screenSize != 'small',
                 items = this.model.get('_items'),
                 map = new Array(items.length),
-                free = new Array(),
+                free = [],
                 i = 0, l = 0, pin, zone;
 
             // map first correctly placed pin to item and log other pins as free for moving
