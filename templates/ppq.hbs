@@ -2,20 +2,20 @@
     {{> component this}}
     <div class="ppq-widget component-widget {{#unless _isEnabled}} disabled {{#if _isComplete}} complete submitted show-user-answer {{#if _isCorrect}}correct{{/if}} {{/if}} {{/unless}}">
         <div class="ppq-other-device {{#unless _showOtherDeviceCompletionMessage}}display-none{{/unless}}">{{{a11y_text _globals._components._ppq.otherDeviceCompletionMessage}}}</div>
-    	<div class="ppq-pinboard-container {{#if _showOtherDeviceCompletionMessage}}display-none{{/if}}">
-    		<div class="ppq-pinboard-container-inner">
+        <div class="ppq-pinboard-container {{#if _showOtherDeviceCompletionMessage}}display-none{{/if}}">
+            <div class="ppq-pinboard-container-inner">
 
-    			{{#each _items}}
-			    	<div class="ppq-correct-zone {{#unless ../_developerMode}}display-none{{/unless}}"></div>
-      			{{/each}}
+                {{#each _items}}
+                    <div class="ppq-correct-zone {{#unless ../_developerMode}}display-none{{/unless}}"></div>
+                  {{/each}}
 
                 <div class="ppq-boundary">
-    				<img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
+                    <img class="ppq-pinboard {{#if _developerMode}}developer-mode{{/if}}" src="{{_pinboardDesktop.src}}" title="{{_pinboardDesktop.title}}" alt="{{_pinboardDesktop.title}}" draggable="false" style="-moz-user-select: none;" ondragstart="return false;"/>
                 </div>
 
-    		</div>
+            </div>
             <span class="ppq-debug"></span>
-    	</div>
+        </div>
     </div>
     <div>
         <div class="buttons">
