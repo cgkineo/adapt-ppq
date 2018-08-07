@@ -58,7 +58,7 @@
           "validators": [
             "required"
           ],
-          "help": "This is the image that appears behind the pins"
+          "help": "This is the image that appears behind the pins on desktop"
         },
         "alt": {
           "type": "string",
@@ -83,7 +83,7 @@
     "_pinboardMobile": {
       "type": "object",
       "required": false,
-      "title": "Pin board desktop",
+      "title": "Pin board mobile",
       "properties": {
         "src": {
           "type": "string",
@@ -93,7 +93,7 @@
           "validators": [
             "required"
           ],
-          "help": "This is the image that appears behind the pins"
+          "help": "This is the image that appears behind the pins on mobile"
         },
         "alt": {
           "type": "string",
