@@ -236,6 +236,57 @@
         }
       }
     },
+    "_attempts": {
+      "type": "number",
+      "required": true,
+      "default": 1,
+      "title": "Attempts",
+      "inputType": "Number",
+      "validators": ["required", "number"],
+      "help": "How many attempts the learner is allowed"
+    },
+    "_canShowModelAnswer": {
+      "type": "boolean",
+      "required": true,
+      "default": true,
+      "title": "Display Model Answer",
+      "inputType": "Checkbox",
+      "validators": [],
+      "help": "Allow the user to view the 'model answer' if they answer the question incorrectly?"
+    },
+    "_canShowFeedback": {
+      "type": "boolean",
+      "required": true,
+      "default": true,
+      "title": "Display Feedback",
+      "inputType": "Checkbox",
+      "validators": []
+    },
+    "_canShowMarking": {
+      "type": "boolean",
+      "default": true,
+      "title": "Display Marking",
+      "inputType": "Checkbox",
+      "validators": []
+    },
+    "_shouldDisplayAttempts": {
+      "type": "boolean",
+      "required": false,
+      "default": false,
+      "title": "Display Attempts",
+      "inputType": "Checkbox",
+      "validators": [],
+      "help": "Display the number of attempts remaining?"
+    },
+    "_questionWeight": {
+      "type": "number",
+      "required": false,
+      "default": 1,
+      "title": "Question Weight",
+      "inputType": "Number",
+      "validators": ["number"],
+      "help": "How much this question is worth"
+    },
     "_feedback": {
       "type": "object",
       "required": false,
@@ -440,6 +491,26 @@
               "translatable": true
             }
           }
+        },
+        "remainingAttemptsText": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "title": "Attempts Remaining Text",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Shown when there are multiple attempts left",
+          "translatable": true
+        },
+        "remainingAttemptText": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "title": "Final Attempt Text",
+          "inputType": "QuestionButton",
+          "validators": [],
+          "help": "Shown when there is one attempt left",
+          "translatable": true
         },
         "resetPins": {
           "type": "object",
